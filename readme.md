@@ -233,6 +233,8 @@ String channel = PackerNg.getChannel(Context)
 ------
 
 ## 关于作者
+   @moasm 在原作基础上, 适配了v3签名apk的打渠道问题 2020.12.22
+
 
 ### 联系方式
 * Blog: <http://blog.mcxiaoke.com>
