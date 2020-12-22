@@ -1,5 +1,11 @@
-include ':common'
-include ':plugin'
+
+// include ':plugin'
+// include ':helper'
+// include ':app'
+
 include ':cli'
-include ':helper'
-include ':app'
+include ':common'
+
+include ':payload_reader'
+include ':payload_writer'
+

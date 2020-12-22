@@ -1,4 +1,4 @@
-package com.mcxiaoke.packer.support.walle;
+package com.meituan.android.walle;
 
 import java.io.DataOutput;
 import java.io.IOException;
@@ -34,6 +34,7 @@ class ApkSigningBlock {
 
     ApkSigningBlock() {
         super();
+
         payloads = new ArrayList<ApkSigningPayload>();
     }
 
@@ -45,14 +46,8 @@ class ApkSigningBlock {
         payloads.add(payload);
     }
 
-    /**
-     * @param dataOutput DataOutput
-     * @return ApkSigningBlock length
-     * @throws IOException IOException
-     */
-    public long writeTo(final DataOutput dataOutput) throws IOException {
-        long length = 24; // 24 = 8(size of block in bytes
-        // same as the very first field (uint64)) + 16 (magic “APK Sig Block 42” (16 bytes))
+    public long writeApkSigningBlock(final DataOutput dataOutput) throws IOException {
+        long length = 24; // 24 = 8(size of block in bytes—same as the very first field (uint64)) + 16 (magic “APK Sig Block 42” (16 bytes))
         for (int index = 0; index < payloads.size(); ++index) {
             final ApkSigningPayload payload = payloads.get(index);
             final byte[] bytes = payload.getByteBuffer();
@@ -92,13 +87,13 @@ class ApkSigningBlock {
 
         byteBuffer = ByteBuffer.allocate(8); // Long.BYTES
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        byteBuffer.putLong(V2Const.APK_SIG_BLOCK_MAGIC_LO);
+        byteBuffer.putLong(ApkUtil.APK_SIG_BLOCK_MAGIC_LO);
         byteBuffer.flip();
         dataOutput.write(byteBuffer.array());
 
         byteBuffer = ByteBuffer.allocate(8); // Long.BYTES
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        byteBuffer.putLong(V2Const.APK_SIG_BLOCK_MAGIC_HI);
+        byteBuffer.putLong(ApkUtil.APK_SIG_BLOCK_MAGIC_HI);
         byteBuffer.flip();
         dataOutput.write(byteBuffer.array());
 

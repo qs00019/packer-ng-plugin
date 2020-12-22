@@ -5,7 +5,7 @@ import com.android.apksig.ApkVerifier.Builder;
 import com.android.apksig.ApkVerifier.IssueWithParams;
 import com.android.apksig.ApkVerifier.Result;
 import com.android.apksig.apk.ApkFormatException;
-import com.mcxiaoke.packer.support.walle.Support;
+import com.mcxiaoke.packer.support.walleV3.SupportV3;
 import junit.framework.TestCase;
 
 import java.io.File;
@@ -95,8 +95,8 @@ public class PayloadTests extends TestCase {
     public void testBytesWrite1() throws IOException {
         File f = newTestFile();
         byte[] in = "Hello".getBytes();
-        Support.writeBlock(f, 0x12345, in);
-        byte[] out = Support.readBytes(f, 0x12345);
+        SupportV3.writeBlock(f, 0x12345, in);
+        byte[] out = SupportV3.readBytes(f, 0x12345);
         assertTrue(TestUtils.sameBytes(in, out));
         checkApkVerified(f);
     }
@@ -104,8 +104,8 @@ public class PayloadTests extends TestCase {
     public void testBytesWrite2() throws IOException {
         File f = newTestFile();
         byte[] in = "中文和特殊符号测试！@#¥%……*（）《》？：【】、".getBytes("UTF-8");
-        Support.writeBlock(f, 0x12345, in);
-        byte[] out = Support.readBytes(f, 0x12345);
+        SupportV3.writeBlock(f, 0x12345, in);
+        byte[] out = SupportV3.readBytes(f, 0x12345);
         assertTrue(TestUtils.sameBytes(in, out));
         checkApkVerified(f);
     }
@@ -198,8 +198,8 @@ public class PayloadTests extends TestCase {
         in.put(string);
         in.flip(); // important
 //        TestUtils.showBuffer(in);
-        Support.writeBlock(f, 0x123456, in);
-        ByteBuffer out = Support.readBlock(f, 0x123456);
+        SupportV3.writeBlock(f, 0x123456, in);
+        ByteBuffer out = SupportV3.readBlock(f, 0x123456);
         assertNotNull(out);
 //        TestUtils.showBuffer(out);
         assertEquals(123, out.getInt());

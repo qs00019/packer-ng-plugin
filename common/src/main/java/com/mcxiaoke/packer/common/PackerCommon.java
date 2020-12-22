@@ -1,6 +1,6 @@
 package com.mcxiaoke.packer.common;
 
-import com.mcxiaoke.packer.support.walle.Support;
+import com.mcxiaoke.packer.support.walleV3.SupportV3;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class PackerCommon {
                             String key,
                             int blockId)
             throws IOException {
-        final Map<String, String> map = readValues(file, blockId);
+        final Map<String, String> map = readValues(file, blockId); // ....
         if (map == null || map.isEmpty()) {
             return null;
         }
@@ -70,7 +70,7 @@ public class PackerCommon {
 
     public static String readString(File file, int blockId)
             throws IOException {
-        final byte[] bytes = readBytes(file, blockId);
+        final byte[] bytes = readBytes(file, blockId); /// 22222
         if (bytes == null || bytes.length == 0) {
             return null;
         }
@@ -118,29 +118,35 @@ public class PackerCommon {
                                  int blockId)
             throws IOException {
         ByteBuffer buffer = wrapPayload(payload);
-        Support.writeBlock(file, blockId, buffer);
+        SupportV3.writeBlock(file, blockId, buffer);
     }
 
     // package visible for test
     static byte[] readPayloadImpl(File file, int blockId)
             throws IOException {
-        ByteBuffer buffer = Support.readBlock(file, blockId);
+        ByteBuffer buffer = SupportV3.readBlock(file, blockId);
         if (buffer == null) {
             return null;
         }
         byte[] magic = BLOCK_MAGIC.getBytes(UTF8);
         byte[] actual = new byte[magic.length];
         buffer.get(actual);
-        if (Arrays.equals(magic, actual)) {
-            int payloadLength1 = buffer.getInt();
-            if (payloadLength1 > 0) {
-                byte[] payload = new byte[payloadLength1];
-                buffer.get(payload);
-                int payloadLength2 = buffer.getInt();
-                if (payloadLength2 == payloadLength1) {
-                    return payload;
+        try {
+            if (Arrays.equals(magic, actual)) {
+                int payloadLength1 = buffer.getInt();
+                if (payloadLength1 > 0) {
+                    byte[] payload = new byte[payloadLength1];
+                    buffer.get(payload);
+                    int payloadLength2 = buffer.getInt();
+                    if (payloadLength2 == payloadLength1) {
+                        return payload;
+                    }
                 }
             }
+        } catch (Exception e) {
+            System.out.println(String.format("> [ERROR], PackerCommon.readPayloadImpl, [apk:%s, blockId:%s]E:%s",
+                    file, blockId, e));
+            e.printStackTrace();
         }
         return null;
     }
