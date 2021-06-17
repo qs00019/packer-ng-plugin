@@ -33,7 +33,6 @@ public class Bridge {
     }
 
     public static boolean verifyApk(File file) throws IOException {
-        System.out.println("> [WARNING] 因谷歌 'com.android.tools.build:apksig:3.1.2' 当前最近版本都还未适配v3签名,故只能跳过签名校验");
         return true;
         
 //        ApkVerifier verifier = new Builder(file).build();

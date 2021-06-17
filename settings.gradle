@@ -1,7 +1,7 @@
 
-// include ':plugin'
-// include ':helper'
-// include ':app'
+ include ':plugin'
+ include ':helper'
+/* include ':app'*/
 
 include ':cli'
 include ':common'
